@@ -1,40 +1,44 @@
 import React from 'react';
 //https://stackoverflow.com/questions/22073716/create-a-waveform-of-the-full-track-with-web-audio-api
+//https://wavesurfer-js.org/examples/
 class Spectrum extends React.Component {
     constructor() {
         super();
         this.init = this.init.bind(this);
         this.analyzeAudio = this.analyzeAudio.bind(this)
         this.play = this.play.bind(this)
+        this.trackTime = this.trackTime.bind(this)
     }
 
     init() {
-        //arrayBUffer
+        //arrayBuffer
         const fileReader = new FileReader();
+        // music
+        const fileReader2 = new FileReader();
+
         if (this.props.audioFile) {
             fileReader.readAsArrayBuffer(this.props.audioFile);
+            fileReader2.readAsDataURL(this.props.audioFile);
         }
         fileReader.addEventListener("load", (e) => {
             this.analyzeAudio(fileReader.result);
         }, false);
-        // music
-        const fileReader2 = new FileReader();
-        if (this.props.audioFile) {
-            fileReader2.readAsDataURL(this.props.audioFile);
-        }
+
         fileReader2.addEventListener("load", (e) => {
             this.audio.src = fileReader2.result;
+
         }, false);
     }
 
     analyzeAudio(buffer) {
         let context = new (window.AudioContext || window.webkitAudioContext)();
         context.decodeAudioData(buffer).then((decoded) => {
-            console.log(decoded.getChannelData(0));
             this.displayBuffer(decoded);
         });
     }
-
+    trackTime(e) {
+        console.log(e.target.currentTime)
+    }
     play() {
         this.audio.play();
     }
@@ -77,7 +81,7 @@ class Spectrum extends React.Component {
         return (
             <div>
                 spectrum
-                <audio ref={el => this.audio = el} />
+                <audio onTimeUpdate={this.trackTime} ref={el => this.audio = el} />
                 <canvas width="500px" height="150px" ref={el => this.canvasContainer = el} />
                 <button onClick={this.play} >play</button>
             </div>
