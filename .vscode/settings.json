@@ -1,0 +1,12 @@
+{
+    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "workbench.panel.location": "bottom",
+    "files.associations": {
+        "*.js": "javascriptreact",
+        ".jshintrc": "jsonc"
+    },
+    "editor.formatOnSave": true,
+    "python.linting.enabled": false,
+    "editor.tabSize": 4,
+    "jshint.enable": false
+}

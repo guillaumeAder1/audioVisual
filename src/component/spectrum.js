@@ -45,7 +45,6 @@ class Spectrum extends React.Component {
         context.decodeAudioData(buffer, (decoded) => {
             source.buffer = decoded;
             source.connect(context.destination);
-            source.start()
             this.displayBuffer(decoded);
         }, (err) => console.log(err));
     }
@@ -95,7 +94,7 @@ class Spectrum extends React.Component {
                 <audio onTimeUpdate={this.trackTime} ref={el => this.audio = el} />
                 <canvas width="500px" height="150px" ref={el => this.canvasContainer = el} />
                 <br />
-                <button onClick={this.play} >play</button>
+                <button onClick={this.play}>play</button>
             </div>
         );
     }

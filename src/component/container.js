@@ -9,8 +9,8 @@ class Container extends React.Component {
             audioFile: null
         }
 
-        this.audioSelected = this.audioSelected.bind(this)
-        this.sendAudio = this.sendAudio.bind(this)
+        this.audioSelected = this.audioSelected.bind(this);
+        this.sendAudio = this.sendAudio.bind(this);
     }
 
     sendAudio(file) {
