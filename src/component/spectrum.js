@@ -1,5 +1,6 @@
 import React from 'react';
 import TrackDetails from './trackDetails'
+import Fader from './fader'
 //https://stackoverflow.com/questions/22073716/create-a-waveform-of-the-full-track-with-web-audio-api
 //https://wavesurfer-js.org/examples/
 class Spectrum extends React.Component {
@@ -11,6 +12,7 @@ class Spectrum extends React.Component {
             duration: 0,
             isplaying: false,
             curfile: null,
+            sliderVal: 1
         }
         this.isplaying = false;
         this.init = this.init.bind(this);
@@ -18,6 +20,7 @@ class Spectrum extends React.Component {
         this.play = this.play.bind(this)
         this.trackTime = this.trackTime.bind(this)
         this.reset = this.reset.bind(this)
+        this.getSliderVal = this.getSliderVal.bind(this)
 
         this.interval = false;
 
@@ -131,6 +134,13 @@ class Spectrum extends React.Component {
     componentDidMount() {
         this.audio.addEventListener('ended', this.reset)
     }
+
+    getSliderVal(e) {
+        this.audio.playbackRate = e
+        // console.log(e.target.value)
+        // this.audio.playbackRate = e.target.value
+        //this.setState({ sliderVal: e.target.value })
+    }
     render() {
 
         return (
@@ -140,6 +150,8 @@ class Spectrum extends React.Component {
                 <TrackDetails total={this.state.duration} current={this.state.curtime} />
                 <br />
                 <button onClick={this.play}>play</button>
+                {/* <input type="range" orient="vertical" value={this.state.sliderVal} min="0" max="2" step="0.1" onChange={this.getSliderVal} /> */}
+                {this.audio && <Fader callback={(val) => this.audio.playbackRate = val} />}
             </div>
         );
     }

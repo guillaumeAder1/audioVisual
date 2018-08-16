@@ -12,7 +12,7 @@ const TrackDetails = (props) => {
     }
 
     return (
-        <div> time: {Math.round(props.current)} /{Math.round(props.total)}secs </div>
+        <div> time: {Math.round(props.current)} /{Math.round(props.total)} s </div>
     );
 }
 
