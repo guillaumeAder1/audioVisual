@@ -1,6 +1,6 @@
 import React from 'react';
 import Fileloader from './fileloader'
-import Spectrum from './spectrum'
+import Main from './main'
 
 class Container extends React.Component {
     constructor() {
@@ -32,8 +32,8 @@ class Container extends React.Component {
         return (
             <div className="container">
                 <h1>Select an Audio File</h1>
-                <Spectrum audioFile={audio} />
-                <Fileloader callback={this.audioSelected} />
+                <Main audioFile={audio} />
+                {/* <Fileloader callback={this.audioSelected} /> */}
             </div>
         );
     }

@@ -53,11 +53,25 @@ class Fileloader extends React.Component {
 
     render() {
         return (
-            <div>
-                <br />
-                <input ref={node => this.node = node} type="file" onChange={e => this.fileSelected(e.target.files[0])} />
+            <div class="file is-boxed">
+                <label class="file-label">
+                    <input class="file-input" type="file" name="resume">
+                        <span class="file-cta">
+                            <span class="file-icon">
+                                <i class="fas fa-upload"></i>
+                            </span>
+                            <span class="file-label">
+                                Choose a file…
+      </span>
+                        </span>
+  </label>
+</div>
 
-                {/* {this.state.samples &&
+                <div>
+                    <br />
+                    <input ref={node => this.node = node} type="file" onChange={e => this.fileSelected(e.target.files[0])} />
+
+                    {/* {this.state.samples &&
                     this.state.samples.map((el, index) => {
                         return <div
                             onClick={(e) => this.selectSample(el)}
@@ -68,9 +82,9 @@ class Fileloader extends React.Component {
                     })
                 } */}
 
-            </div>
-        );
-    }
-}
-
+                </div>
+                );
+            }
+        }
+        
 export default Fileloader;

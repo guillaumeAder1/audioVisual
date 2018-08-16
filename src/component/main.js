@@ -1,29 +1,32 @@
 import React, { Fragment } from 'react';
-import TrackDetails from './trackDetails'
+import TrackDetails from './trackdetails'
 import Fader from './fader'
 import Canvas from './canvas'
+import Fileloader from './fileloader'
 //https://stackoverflow.com/questions/22073716/create-a-waveform-of-the-full-track-with-web-audio-api
 //https://wavesurfer-js.org/examples/
-class Spectrum extends React.Component {
+class Main extends React.Component {
     constructor() {
         super();
-
         this.state = {
             curtime: 0,
             duration: 0,
             isplaying: false,
             curfile: null,
             sliderVal: 1,
-            buffer: false
+            buffer: false,
+            audioFile: null
         }
         this.interval = false;
         this.isplaying = false;
-
+        //
         this.init = this.init.bind(this);
         this.analyzeAudio = this.analyzeAudio.bind(this)
         this.play = this.play.bind(this)
         this.trackTime = this.trackTime.bind(this)
         this.reset = this.reset.bind(this)
+        this.audioSelected = this.audioSelected.bind(this);
+
     }
 
     init(audiofile) {
@@ -88,6 +91,16 @@ class Spectrum extends React.Component {
         if (!this.interval) { this.interval = setInterval(() => this.trackTime(), 100) }
     }
 
+    audioSelected(file) {
+        this.setState({
+            audioFile: file
+        }, () => {
+            console.log(this.state);
+            this.fileReceived(file)
+        })
+
+    }
+
     reset() {
         this.setState({ curtime: 0 });
         this.isplaying = false;
@@ -95,11 +108,10 @@ class Spectrum extends React.Component {
         this.interval = false; // important to reset the interval to false
     }
 
-    componentWillReceiveProps(props) {
-        if (props.audioFile && props.audioFile != this.props.audioFile) {
-            this.init(props.audioFile);
-            this.reset()
-        }
+
+    fileReceived(file) {
+        this.init(file);
+        this.reset()
     }
 
     componentDidMount() {
@@ -108,19 +120,27 @@ class Spectrum extends React.Component {
 
 
     render() {
-
         return (
-            <div >
+            <Fragment >
+                <div className="columns">
+                    <div className="column is-2">
+                        <TrackDetails total={this.state.duration} current={this.state.curtime} />
+                        <Fileloader callback={this.audioSelected} />
+                        <button onClick={this.play}>play</button>
+                    </div>
+                    <div className="column is-10">
+                        <Canvas buffer={this.state.buffer} />
+                    </div>
+                </div>
+
                 <audio ref={el => this.audio = el} />
-                <Canvas buffer={this.state.buffer} />
-                <TrackDetails total={this.state.duration} current={this.state.curtime} />
-                <br />
-                <button onClick={this.play}>play</button>
+
+
                 {this.audio && <Fader callback={(val) => this.audio.playbackRate = val} />}
-            </div>
+            </Fragment>
         );
     }
 }
 
 
-export default Spectrum;
+export default Main;
