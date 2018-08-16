@@ -38,33 +38,22 @@ class Fileloader extends React.Component {
             this.fileSelected({ isbuff: true, buff: request.response })
         }
         request.send()
-
-        // const f = new FileReader()
-        // fetch(this.state.root + src)
-        //     .then(resp => resp.arrayBuffer())
-        //     .then(buff => {
-        //         console.log(buff)
-        //         this.fileSelected({isbuff:true, buff})
-        //     });
-        // var audio = new Audio(this.state.root + src);
-        // audio.play();
-        // https://stackoverflow.com/questions/46354505/filereader-readasarraybuffer-with-a-local-mp3-file
     }
 
     render() {
         return (
-            <div class="file">
-                <label class="file-label">
+            <div className="file is-small">
+                <label className="file-label">
                     <input
                         ref={node => this.node = node}
                         className="file-input"
                         type="file"
                         onChange={e => this.fileSelected(e.target.files[0])} />
-                    <span class="file-cta">
-                        <span class="file-icon">
-                            <i class="fas fa-upload"></i>
+                    <span className="file-cta">
+                        <span className="file-icon">
+                            <i className="fas fa-upload"></i>
                         </span>
-                        <span class="file-label">
+                        <span className="file-label">
                             Choose a file…
                         </span>
                     </span>

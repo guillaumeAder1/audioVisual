@@ -126,7 +126,8 @@ class Main extends React.Component {
                     <div className="column is-2">
                         <TrackDetails total={this.state.duration} current={this.state.curtime} />
                         <Fileloader callback={this.audioSelected} />
-                        <button onClick={this.play}>play</button>
+
+                        <button className="button is-small" onClick={this.play}>play</button>
                     </div>
                     <div className="column is-10">
                         <Canvas buffer={this.state.buffer} />
