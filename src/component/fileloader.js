@@ -53,38 +53,26 @@ class Fileloader extends React.Component {
 
     render() {
         return (
-            <div class="file is-boxed">
+            <div class="file">
                 <label class="file-label">
-                    <input class="file-input" type="file" name="resume">
-                        <span class="file-cta">
-                            <span class="file-icon">
-                                <i class="fas fa-upload"></i>
-                            </span>
-                            <span class="file-label">
-                                Choose a file…
-      </span>
+                    <input
+                        ref={node => this.node = node}
+                        className="file-input"
+                        type="file"
+                        onChange={e => this.fileSelected(e.target.files[0])} />
+                    <span class="file-cta">
+                        <span class="file-icon">
+                            <i class="fas fa-upload"></i>
                         </span>
-  </label>
-</div>
+                        <span class="file-label">
+                            Choose a file…
+                        </span>
+                    </span>
+                </label>
+            </div>
 
-                <div>
-                    <br />
-                    <input ref={node => this.node = node} type="file" onChange={e => this.fileSelected(e.target.files[0])} />
+        );
+    }
+}
 
-                    {/* {this.state.samples &&
-                    this.state.samples.map((el, index) => {
-                        return <div
-                            onClick={(e) => this.selectSample(el)}
-                            key={index}>
-                            {el.src.replace('.wav', '')}
-
-                        </div>
-                    })
-                } */}
-
-                </div>
-                );
-            }
-        }
-        
 export default Fileloader;
