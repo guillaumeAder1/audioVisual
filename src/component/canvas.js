@@ -42,9 +42,8 @@ class Canvas extends React.Component {
         this.props.buffer && this.draw(this.props.buffer)
         return (
             <canvas height="150px" ref={el => this.canvasContainer = el} />
-
         )
     }
 }
-
+// TEST
 export default Canvas
