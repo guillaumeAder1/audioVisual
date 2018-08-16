@@ -1,9 +1,15 @@
 import React from 'react';
+import TrackDetails from './trackDetails'
 //https://stackoverflow.com/questions/22073716/create-a-waveform-of-the-full-track-with-web-audio-api
 //https://wavesurfer-js.org/examples/
 class Spectrum extends React.Component {
     constructor() {
         super();
+
+        this.state = {
+            curtime: 0,
+            duration: 0
+        }
         this.init = this.init.bind(this);
         this.analyzeAudio = this.analyzeAudio.bind(this)
         this.play = this.play.bind(this)
@@ -38,21 +44,24 @@ class Spectrum extends React.Component {
      */
     analyzeAudio(buffer, isFile) {
         const context = new (window.AudioContext || window.webkitAudioContext)();
-        const source = context.createBufferSource();
+        this.source = context.createBufferSource();
         if (!isFile) {
 
         }
         context.decodeAudioData(buffer, (decoded) => {
-            source.buffer = decoded;
-            source.connect(context.destination);
+            this.source.buffer = decoded;
+            this.source.connect(context.destination);
+            this.setState({ duration: decoded.duration });
             this.displayBuffer(decoded);
         }, (err) => console.log(err));
     }
     trackTime(e) {
-        console.log(e.target.currentTime)
+        console.log(this.audio, this.source)
+        // this.setState({ curtime: e.target.currentTime });
     }
     play() {
         this.audio.play();
+        setInterval(() => this.trackTime(), 100)
     }
     displayBuffer(buff) {
         this.canvas = this.canvasContainer.getContext('2d');
@@ -86,13 +95,13 @@ class Spectrum extends React.Component {
     }
     render() {
         if (this.props.audioFile) {
-            console.log(this.props.audioFile);
             this.init(this.props.audioFile);
         }
         return (
             <div>
-                <audio onTimeUpdate={this.trackTime} ref={el => this.audio = el} />
+                <audio ref={el => this.audio = el} />
                 <canvas width="500px" height="150px" ref={el => this.canvasContainer = el} />
+                <TrackDetails total={this.state.duration} current={this.state.curtime} />
                 <br />
                 <button onClick={this.play}>play</button>
             </div>
