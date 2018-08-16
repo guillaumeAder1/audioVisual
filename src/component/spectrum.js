@@ -61,6 +61,7 @@ class Spectrum extends React.Component {
     }
     trackTime(e) {
         console.log(this.audio.currentTime, this.source)
+        this.setState({ curtime: this.audio.currentTime })
         // this.setState({ curtime: e.target.currentTime });
     }
     play() {
