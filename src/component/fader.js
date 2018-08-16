@@ -17,26 +17,18 @@ class Fader extends React.Component {
     }
     render() {
         return (
-            <div className="card">
-                <div clasNames="content">
-                    <input type="range" orient="vertical" value={this.state.value} min="0" max="2" step="0.1" onChange={this.getSliderVal} />
-                    <div class="field is-grouped">
-                        <div class="control">
-                            <button class="button is-link">Submit</button>
-                        </div>
-                        <div class="control">
-                            <button class="button is-text">Cancel</button>
-                        </div>
-                    </div>
-                </div>
+            <div className="container">
 
 
 
                 <div className="tile is-ancestor">
                     <div className="tile is-parent">
                         <article className="tile is-child box">
-                            <input type="range" orient="vertical" value={this.state.value} min="0" max="2" step="0.1" onChange={this.getSliderVal} />
-
+                            <p className="title">Two</p>
+                            <p className="subtitle">Subtitle</p>
+                            <div className=" has-text-centered">
+                                <input type="range" orient="vertical" value={this.state.value} min="0" max="2" step="0.1" onChange={this.getSliderVal} />
+                            </div>
                         </article>
                     </div>
                     <div className="tile is-parent">
@@ -45,7 +37,7 @@ class Fader extends React.Component {
                             <p className="subtitle">Subtitle</p>
                         </article>
                     </div>
-                    <div className="tile is-parent">
+                    {/* <div className="tile is-parent">
                         <article className="tile is-child box">
                             <p className="title">Three</p>
                             <p className="subtitle">Subtitle</p>
@@ -56,7 +48,7 @@ class Fader extends React.Component {
                             <p className="title">Four</p>
                             <p className="subtitle">Subtitle</p>
                         </article>
-                    </div>
+                    </div> */}
                 </div>
 
             </div>
