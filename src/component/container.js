@@ -30,7 +30,7 @@ class Container extends React.Component {
     render() {
         const audio = this.state.audioFile || false;
         return (
-            <div>
+            <div className="container">
                 <h1>Select an Audio File</h1>
                 <Spectrum audioFile={audio} />
                 <Fileloader callback={this.audioSelected} />
