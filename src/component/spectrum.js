@@ -8,26 +8,29 @@ class Spectrum extends React.Component {
 
         this.state = {
             curtime: 0,
-            duration: 0
+            duration: 0,
+            isplaying: false,
+            curfile: null,
         }
+        this.isplaying = false;
         this.init = this.init.bind(this);
         this.analyzeAudio = this.analyzeAudio.bind(this)
         this.play = this.play.bind(this)
         this.trackTime = this.trackTime.bind(this)
     }
 
-    init() {
+    init(audiofile) {
         //arrayBuffer
         const fileReader = new FileReader();
         // music
         const fileReader2 = new FileReader();
 
-        if (this.props.audioFile) {
+        if (audiofile) {
             if (this.props.audioFile.isbuff) {
                 this.analyzeAudio(this.props.audioFile.buff, false)
             } else {
-                fileReader.readAsArrayBuffer(this.props.audioFile);
-                fileReader2.readAsDataURL(this.props.audioFile);
+                fileReader.readAsArrayBuffer(audiofile);
+                fileReader2.readAsDataURL(audiofile);
             }
         }
         fileReader.addEventListener("load", (e) => {
@@ -48,6 +51,7 @@ class Spectrum extends React.Component {
         if (!isFile) {
 
         }
+        this.context = context
         context.decodeAudioData(buffer, (decoded) => {
             this.source.buffer = decoded;
             this.source.connect(context.destination);
@@ -60,7 +64,23 @@ class Spectrum extends React.Component {
         // this.setState({ curtime: e.target.currentTime });
     }
     play() {
-        this.audio.play();
+        //this.source.start()
+
+        if (this.isplaying) {
+            //this.source.stop(0)
+            // this.context.suspend().then(() => {
+            //     this.source.stop()
+            // })
+            this.audio.pause()
+        } else {
+            this.audio.play();
+            //this.source.start(0)
+
+            // this.context.resume().then(() => {
+            //     this.source.start()
+            // })
+        }
+        this.isplaying = !this.isplaying;
         setInterval(() => this.trackTime(), 100)
     }
     displayBuffer(buff) {
@@ -95,10 +115,14 @@ class Spectrum extends React.Component {
         this.canvas.stroke();
         this.canvas.restore();
     }
-    render() {
-        if (this.props.audioFile) {
-            this.init(this.props.audioFile);
+
+    componentWillReceiveProps(props) {
+        if (props.audioFile && props.audioFile != this.props.audioFile) {
+            this.init(props.audioFile);
         }
+    }
+    render() {
+
         return (
             <div>
                 <audio ref={el => this.audio = el} />
