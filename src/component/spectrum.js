@@ -56,7 +56,7 @@ class Spectrum extends React.Component {
         }, (err) => console.log(err));
     }
     trackTime(e) {
-        console.log(this.audio, this.source)
+        console.log(this.audio.currentTime, this.source)
         // this.setState({ curtime: e.target.currentTime });
     }
     play() {
@@ -66,7 +66,9 @@ class Spectrum extends React.Component {
     displayBuffer(buff) {
         this.canvas = this.canvasContainer.getContext('2d');
         const canvasHeight = this.canvasContainer.clientHeight;
-        const canvasWidth = this.canvasContainer.clientWidth;
+        this.canvasContainer.style.width = '100%';
+        this.canvasContainer.width = this.canvasContainer.offsetWidth;
+        const canvasWidth = this.canvasContainer.offsetWidth;
         const drawLines = 500;
         const leftChannel = buff.getChannelData(0); // Float32Array describing left channel     
         const lineOpacity = canvasWidth / leftChannel.length;
@@ -100,7 +102,7 @@ class Spectrum extends React.Component {
         return (
             <div>
                 <audio ref={el => this.audio = el} />
-                <canvas width="500px" height="150px" ref={el => this.canvasContainer = el} />
+                <canvas height="150px" ref={el => this.canvasContainer = el} />
                 <TrackDetails total={this.state.duration} current={this.state.curtime} />
                 <br />
                 <button onClick={this.play}>play</button>
