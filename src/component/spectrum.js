@@ -17,6 +17,10 @@ class Spectrum extends React.Component {
         this.analyzeAudio = this.analyzeAudio.bind(this)
         this.play = this.play.bind(this)
         this.trackTime = this.trackTime.bind(this)
+        this.reset = this.reset.bind(this)
+
+        this.interval = false;
+
     }
 
     init(audiofile) {
@@ -48,9 +52,6 @@ class Spectrum extends React.Component {
     analyzeAudio(buffer, isFile) {
         const context = new (window.AudioContext || window.webkitAudioContext)();
         this.source = context.createBufferSource();
-        if (!isFile) {
-
-        }
         this.context = context
         context.decodeAudioData(buffer, (decoded) => {
             this.source.buffer = decoded;
@@ -59,13 +60,11 @@ class Spectrum extends React.Component {
             this.displayBuffer(decoded);
         }, (err) => console.log(err));
     }
-    trackTime(e) {
-        console.log(this.audio.currentTime, this.source)
+    trackTime() {
+        console.log(this.audio.currentTime)
         this.setState({ curtime: this.audio.currentTime })
-        // this.setState({ curtime: e.target.currentTime });
     }
     play() {
-        //this.source.start()
 
         if (this.isplaying) {
             //this.source.stop(0)
@@ -76,13 +75,12 @@ class Spectrum extends React.Component {
         } else {
             this.audio.play();
             //this.source.start(0)
-
             // this.context.resume().then(() => {
             //     this.source.start()
             // })
         }
         this.isplaying = !this.isplaying;
-        setInterval(() => this.trackTime(), 100)
+        if (!this.interval) { this.interval = setInterval(() => this.trackTime(), 100) }
     }
     displayBuffer(buff) {
         this.canvas = this.canvasContainer.getContext('2d');
@@ -120,7 +118,18 @@ class Spectrum extends React.Component {
     componentWillReceiveProps(props) {
         if (props.audioFile && props.audioFile != this.props.audioFile) {
             this.init(props.audioFile);
+            this.reset()
         }
+    }
+    reset() {
+        this.setState({ curtime: 0 });
+        this.isplaying = false;
+        clearInterval(this.interval)
+        this.interval = false; // important to reset the interval
+    }
+
+    componentDidMount() {
+        this.audio.addEventListener('ended', this.reset)
     }
     render() {
 
