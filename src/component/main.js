@@ -3,6 +3,7 @@ import TrackDetails from './trackdetails'
 import Fader from './fader'
 import Canvas from './canvas'
 import Fileloader from './fileloader'
+import Button from './button'
 //https://stackoverflow.com/questions/22073716/create-a-waveform-of-the-full-track-with-web-audio-api
 //https://wavesurfer-js.org/examples/
 // REVERBE LIB = https://github.com/mmckegg/soundbank-reverb/blob/master/index.js
@@ -156,10 +157,17 @@ class Main extends React.Component {
                     <div className="column is-2">
                         <TrackDetails total={this.state.duration} current={this.state.curtime} />
                         <Fileloader callback={this.audioSelected} />
-                        <button className="button is-small" onClick={this.play}><i className="fas fa-play"></i></button>
+                        <Section>
+                            <Button action={this.play} icon="fas fa-play" />
+                            <Button icon="fas fa-pause" />
+                            <Button action={this.loop} icon="fas fa-undo-alt" />
+                            <Button icon="fas fa-volume-up" />
+
+                        </Section>
+                        {/* <button className="button is-small" onClick={this.play}><i className="fas fa-play"></i></button>
                         <button className="button is-small" ><i className="fas fa-pause"></i></button>
                         <button className="button is-small" onClick={this.loop}><i className="fas fa-undo-alt"></i></button>
-                        <button className="button is-small" ><i className="fas fa-volume-up"></i></button>
+                        <button className="button is-small" ><i className="fas fa-volume-up"></i></button> */}
                     </div>
                     <div className="column is-10">
                         <Canvas buffer={this.state.buffer} />
