@@ -7,9 +7,9 @@ import Container from './component/container';
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <Container />
-      </div>
+
+      <Container />
+
     );
   }
 }

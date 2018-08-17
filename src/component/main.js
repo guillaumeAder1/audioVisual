@@ -54,9 +54,8 @@ class Main extends React.Component {
     }
     /**
      * buffer data
-     * isFile - true if the file is loaded from the input file
      */
-    analyzeAudio(buffer, isFile) {
+    analyzeAudio(buffer) {
         const context = new (window.AudioContext || window.webkitAudioContext)();
         this.source = context.createBufferSource();
         this.context = context
@@ -122,25 +121,44 @@ class Main extends React.Component {
     render() {
         return (
             <Fragment >
-                <div className="columns">
-                    <div className="column is-2">
-                        <TrackDetails total={this.state.duration} current={this.state.curtime} />
-                        <Fileloader callback={this.audioSelected} />
+                <div className="section">
+                    <div className="columns">
+                        <div className="column is-2">
+                            <TrackDetails total={this.state.duration} current={this.state.curtime} />
+                            <Fileloader callback={this.audioSelected} />
 
-                        <button className="button is-small" onClick={this.play}><i class="fas fa-play"></i></button>
-                        <button className="button is-small" ><i class="fas fa-pause"></i></button>
-                        <button className="button is-small" ><i class="fas fa-undo-alt"></i></button>
-                        <button className="button is-small" ><i class="fas fa-volume-up"></i></button>
-                    </div>
-                    <div className="column is-10">
-                        <Canvas buffer={this.state.buffer} />
+                            <button className="button is-small" onClick={this.play}><i class="fas fa-play"></i></button>
+                            <button className="button is-small" ><i class="fas fa-pause"></i></button>
+                            <button className="button is-small" ><i class="fas fa-undo-alt"></i></button>
+                            <button className="button is-small" ><i class="fas fa-volume-up"></i></button>
+                        </div>
+                        <div className="column is-10">
+                            <Canvas buffer={this.state.buffer} />
+                        </div>
                     </div>
                 </div>
 
                 <audio ref={el => this.audio = el} />
 
 
-                {this.audio && <Fader callback={(val) => this.audio.playbackRate = val} />}
+                {this.audio &&
+                    <div className="section">
+                        <div className="tile is-ancestor">
+                            <Fader
+                                title="sample rate"
+                                template="%"
+                                callback={(val) => this.audio.playbackRate = val}
+                                min="0" max="2" step="0.1" default="1"
+                            />
+                            <Fader
+                                title="sound volume"
+                                template=""
+                                callback={(val) => this.audio.volume = val}
+                                min="0" max="1" step="0.1" default="0.1"
+                            />
+                        </div>
+                    </div>
+                }
             </Fragment>
         );
     }
