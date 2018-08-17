@@ -162,12 +162,8 @@ class Main extends React.Component {
                             <Button icon="fas fa-pause" />
                             <Button action={this.loop} icon="fas fa-undo-alt" />
                             <Button icon="fas fa-volume-up" />
-
                         </Section>
-                        {/* <button className="button is-small" onClick={this.play}><i className="fas fa-play"></i></button>
-                        <button className="button is-small" ><i className="fas fa-pause"></i></button>
-                        <button className="button is-small" onClick={this.loop}><i className="fas fa-undo-alt"></i></button>
-                        <button className="button is-small" ><i className="fas fa-volume-up"></i></button> */}
+
                     </div>
                     <div className="column is-10">
                         <Canvas buffer={this.state.buffer} />
@@ -200,6 +196,7 @@ class Main extends React.Component {
 
 const Section = (props) => {
     return (
+
         <div className="section">
             <div className="columns">
                 {props.children}
