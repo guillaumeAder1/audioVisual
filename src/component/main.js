@@ -5,6 +5,7 @@ import Canvas from './canvas'
 import Fileloader from './fileloader'
 //https://stackoverflow.com/questions/22073716/create-a-waveform-of-the-full-track-with-web-audio-api
 //https://wavesurfer-js.org/examples/
+// REVERBE LIB = https://github.com/mmckegg/soundbank-reverb/blob/master/index.js
 class Main extends React.Component {
     constructor() {
         super();
@@ -150,49 +151,53 @@ class Main extends React.Component {
 
     render() {
         return (
-            <Fragment >
-                <div className="section">
-                    <div className="columns">
-                        <div className="column is-2">
-                            <TrackDetails total={this.state.duration} current={this.state.curtime} />
-                            <Fileloader callback={this.audioSelected} />
-
-                            <button className="button is-small" onClick={this.play}><i className="fas fa-play"></i></button>
-                            <button className="button is-small" ><i className="fas fa-pause"></i></button>
-                            <button className="button is-small" onClick={this.loop}><i className="fas fa-undo-alt"></i></button>
-                            <button className="button is-small" ><i className="fas fa-volume-up"></i></button>
-                        </div>
-                        <div className="column is-10">
-                            <Canvas buffer={this.state.buffer} />
-                        </div>
+            <Fragment>
+                <Section>
+                    <div className="column is-2">
+                        <TrackDetails total={this.state.duration} current={this.state.curtime} />
+                        <Fileloader callback={this.audioSelected} />
+                        <button className="button is-small" onClick={this.play}><i className="fas fa-play"></i></button>
+                        <button className="button is-small" ><i className="fas fa-pause"></i></button>
+                        <button className="button is-small" onClick={this.loop}><i className="fas fa-undo-alt"></i></button>
+                        <button className="button is-small" ><i className="fas fa-volume-up"></i></button>
                     </div>
-                </div>
+                    <div className="column is-10">
+                        <Canvas buffer={this.state.buffer} />
+                    </div>
+                </Section>
 
                 <audio ref={el => this.audio = el} />
 
-
                 {this.source &&
-                    <div className="section">
-                        <div className="tile is-ancestor">
-                            <Fader
-                                title="sample rate"
-                                template={(val) => Math.round(val * 100) + "%"}
-                                callback={(val) => this.source.playbackRate.value = val}
-                                min="0" max="2" step="0.1" default="1"
-                            />
-                            <Fader
-                                title="sound volume"
-                                template={val => val}
-                                callback={(val) => this.state.gainNode.gain.value = val}
-                                min="0" max="1" step="0.1" default="0.1"
-                            />
-                        </div>
-                    </div>
+                    <Section>
+                        <Fader
+                            title="sample rate"
+                            template={(val) => Math.round(val * 100) + "%"}
+                            callback={(val) => this.source.playbackRate.value = val}
+                            min="0" max="2" step="0.1" default="1"
+                        />
+                        <Fader
+                            title="sound volume"
+                            template={val => val}
+                            callback={(val) => this.state.gainNode.gain.value = val}
+                            min="0" max="1" step="0.1" default="0.1"
+                        />
+                    </Section>
                 }
             </Fragment>
         );
     }
 }
 
+
+const Section = (props) => {
+    return (
+        <div className="section">
+            <div className="columns">
+                {props.children}
+            </div>
+        </div>
+    )
+}
 
 export default Main;
