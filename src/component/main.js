@@ -15,7 +15,9 @@ class Main extends React.Component {
             curfile: null,
             sliderVal: 1,
             buffer: false,
-            audioFile: null
+            audioFile: null,
+            context: null,
+            gainNode: null,
         }
         this.interval = false;
         this.isplaying = false;
@@ -26,6 +28,7 @@ class Main extends React.Component {
         this.trackTime = this.trackTime.bind(this)
         this.reset = this.reset.bind(this)
         this.audioSelected = this.audioSelected.bind(this);
+
 
     }
 
@@ -58,13 +61,19 @@ class Main extends React.Component {
     analyzeAudio(buffer) {
         const context = new (window.AudioContext || window.webkitAudioContext)();
         this.source = context.createBufferSource();
-        this.context = context
+        const reverbe = context.createConvolver();
+        const gainNode = context.createGain();
         context.decodeAudioData(buffer, (decoded) => {
-            this.source.buffer = decoded;
-            this.source.connect(context.destination);
+            this.source.buffer = this.buffer = decoded;
+            this.source.connect(gainNode);
+            gainNode.gain.value = 0.1;
+            gainNode.connect(context.destination)
+
             this.setState({
                 duration: decoded.duration,
-                buffer: decoded
+                buffer: decoded,
+                context: context,
+                gainNode: gainNode
             });
         }, (err) => console.log(err));
     }
@@ -74,14 +83,20 @@ class Main extends React.Component {
     }
     play() {
         if (this.isplaying) {
-            //this.source.stop(0)
+            this.source.stop(0)
+            this.source = this.state.context.createBufferSource(); // so we need to create a new one
+            this.source.buffer = this.buffer;
+            this.source.connect(this.state.gainNode);
+
+            // source.loop = true;
+
             // this.context.suspend().then(() => {
             //     this.source.stop()
             // })
-            this.audio.pause()
+            // this.audio.pause()
         } else {
-            this.audio.play();
-            //this.source.start(0)
+            // this.audio.play();
+            this.source.start(0)
             // this.context.resume().then(() => {
             //     this.source.start()
             // })
@@ -127,10 +142,10 @@ class Main extends React.Component {
                             <TrackDetails total={this.state.duration} current={this.state.curtime} />
                             <Fileloader callback={this.audioSelected} />
 
-                            <button className="button is-small" onClick={this.play}><i class="fas fa-play"></i></button>
-                            <button className="button is-small" ><i class="fas fa-pause"></i></button>
-                            <button className="button is-small" ><i class="fas fa-undo-alt"></i></button>
-                            <button className="button is-small" ><i class="fas fa-volume-up"></i></button>
+                            <button className="button is-small" onClick={this.play}><i className="fas fa-play"></i></button>
+                            <button className="button is-small" ><i className="fas fa-pause"></i></button>
+                            <button className="button is-small" ><i className="fas fa-undo-alt"></i></button>
+                            <button className="button is-small" ><i className="fas fa-volume-up"></i></button>
                         </div>
                         <div className="column is-10">
                             <Canvas buffer={this.state.buffer} />
@@ -141,19 +156,19 @@ class Main extends React.Component {
                 <audio ref={el => this.audio = el} />
 
 
-                {this.audio &&
+                {this.source &&
                     <div className="section">
                         <div className="tile is-ancestor">
                             <Fader
                                 title="sample rate"
                                 template="%"
-                                callback={(val) => this.audio.playbackRate = val}
+                                callback={(val) => this.source.playbackRate.value = val}
                                 min="0" max="2" step="0.1" default="1"
                             />
                             <Fader
                                 title="sound volume"
                                 template=""
-                                callback={(val) => this.audio.volume = val}
+                                callback={(val) => this.state.gainNode.gain.value = val}
                                 min="0" max="1" step="0.1" default="0.1"
                             />
                         </div>
