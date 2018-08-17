@@ -18,6 +18,7 @@ class Main extends React.Component {
             audioFile: null,
             context: null,
             gainNode: null,
+            loop: false
         }
         this.interval = false;
         this.isplaying = false;
@@ -25,6 +26,7 @@ class Main extends React.Component {
         this.init = this.init.bind(this);
         this.analyzeAudio = this.analyzeAudio.bind(this)
         this.play = this.play.bind(this)
+        this.loop = this.loop.bind(this)
         this.trackTime = this.trackTime.bind(this)
         this.reset = this.reset.bind(this)
         this.audioSelected = this.audioSelected.bind(this);
@@ -69,6 +71,9 @@ class Main extends React.Component {
             gainNode.gain.value = 0.1;
             gainNode.connect(context.destination)
 
+            // this.source.connect(reverbe)
+            // reverbe.connect(context.destination)
+
             this.setState({
                 duration: decoded.duration,
                 buffer: decoded,
@@ -80,6 +85,16 @@ class Main extends React.Component {
     trackTime() {
         console.log(this.audio.currentTime)
         this.setState({ curtime: this.audio.currentTime })
+    }
+
+    loop() {
+        if (this.state.loop) {
+            this.source.loop = false
+        } else {
+            this.source.loop = true
+        }
+        this.setState({ loop: !this.state.loop })
+
     }
     play() {
         if (this.isplaying) {
@@ -144,7 +159,7 @@ class Main extends React.Component {
 
                             <button className="button is-small" onClick={this.play}><i className="fas fa-play"></i></button>
                             <button className="button is-small" ><i className="fas fa-pause"></i></button>
-                            <button className="button is-small" ><i className="fas fa-undo-alt"></i></button>
+                            <button className="button is-small" onClick={this.loop}><i className="fas fa-undo-alt"></i></button>
                             <button className="button is-small" ><i className="fas fa-volume-up"></i></button>
                         </div>
                         <div className="column is-10">
@@ -161,13 +176,13 @@ class Main extends React.Component {
                         <div className="tile is-ancestor">
                             <Fader
                                 title="sample rate"
-                                template="%"
+                                template={(val) => Math.round(val * 100) + "%"}
                                 callback={(val) => this.source.playbackRate.value = val}
                                 min="0" max="2" step="0.1" default="1"
                             />
                             <Fader
                                 title="sound volume"
-                                template=""
+                                template={val => val}
                                 callback={(val) => this.state.gainNode.gain.value = val}
                                 min="0" max="1" step="0.1" default="0.1"
                             />

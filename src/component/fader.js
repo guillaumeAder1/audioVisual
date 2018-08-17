@@ -37,7 +37,7 @@ class Fader extends React.Component {
             <div className="tile is-parent">
                 <article className="tile is-child box">
                     <p className="title">{this.props.title}</p>
-                    <p className="subtitle">{this.state.value + this.props.template}</p>
+                    <p className="subtitle">{this.props.template && this.props.template(this.state.value)}</p>
                     <div className=" has-text-centered">
                         <input
                             type="range"
