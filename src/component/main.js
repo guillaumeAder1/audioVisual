@@ -64,10 +64,9 @@ class Main extends React.Component {
      */
     analyzeAudio(buffer) {
         const context = new (window.AudioContext || window.webkitAudioContext)();
-        this.source = context.createBufferSource();
-        const reverbe = context.createConvolver();
-        const gainNode = context.createGain();
         context.decodeAudioData(buffer, (decoded) => {
+            this.source = context.createBufferSource();
+            const gainNode = context.createGain();
             this.source.buffer = this.buffer = decoded;
             this.source.connect(gainNode);
             gainNode.gain.value = 0.1;
