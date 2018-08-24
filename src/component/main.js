@@ -72,9 +72,6 @@ class Main extends React.Component {
             gainNode.gain.value = 0.1;
             gainNode.connect(context.destination)
 
-            // this.source.connect(reverbe)
-            // reverbe.connect(context.destination)
-
             this.setState({
                 duration: decoded.duration,
                 buffer: decoded,
@@ -83,6 +80,15 @@ class Main extends React.Component {
             });
         }, (err) => console.log(err));
     }
+
+    /**
+     * 
+     */
+    setupAudio(decoded){
+        
+
+    }
+
     trackTime() {
         console.log(this.audio.currentTime)
         this.setState({ curtime: this.audio.currentTime })
@@ -105,7 +111,6 @@ class Main extends React.Component {
             this.source.connect(this.state.gainNode);
 
             // source.loop = true;
-
             // this.context.suspend().then(() => {
             //     this.source.stop()
             // })
